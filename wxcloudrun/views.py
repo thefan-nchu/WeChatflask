@@ -5,6 +5,12 @@ from wxcloudrun.dao import delete_counterbyid, query_counterbyid, insert_counter
 from wxcloudrun.model import Counters
 from wxcloudrun.response import make_succ_empty_response, make_succ_response, make_err_response
 
+import pkuseg
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+from imageio import imread
+from flask import Flask
+
 
 @app.route('/')
 def index():
@@ -64,3 +70,34 @@ def get_count():
     """
     counter = Counters.query.filter(Counters.id == 1).first()
     return make_succ_response(0) if counter is None else make_succ_response(counter.count)
+
+
+app = Flask(__name__)
+
+@app.route('/upload', methods=['POST', 'GET'])
+def upload():
+    f = request.data.decode()[8:-1]
+    seg = pkuseg.pkuseg()
+    text = seg.cut(f)
+    text = str(text)
+    bg_pic = imread('E:\竞赛数据集\设计大赛\R-C.jpg')
+    wordcloud = WordCloud(mask=bg_pic,background_color='white',font_path='E:\竞赛数据集\设计大赛\华文楷体.ttf',scale=1.5).generate(text)
+    '''参数说明：
+    mask:设置背景图片   background_color:设置背景颜色
+    scale:按照比例进行放大画布，此处指长和宽都是原来画布的1.5倍
+    generate(text)：根据文本生成词云 '''
+
+    plt.imshow(wordcloud)
+    #显示图片时不显示坐标尺寸
+    plt.axis('off')
+    #显示词云图片
+    # plt.show()
+    wordcloud.to_file('E:\微信开发者工具\学习管理辅助系统\static\wordcloud.jpg')
+    return "ok"
+
+if __name__ == '__main__':
+    app.run(
+        host='192.168.1.195',
+        port=5000,
+        debug=True,
+    )
