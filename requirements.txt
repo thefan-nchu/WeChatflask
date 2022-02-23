@@ -8,7 +8,7 @@ MarkupSafe==2.0.1
 PyMySQL==1.0.2
 SQLAlchemy==1.4.29
 Werkzeug==2.0.2
-
+pkuseg==0.0.25
 wordcloud==1.8.1
 matplotlib==3.3.4
 imageio==2.9.0
