@@ -23,8 +23,7 @@ RUN pip config set global.index-url http://mirrors.cloud.tencent.com/pypi/simple
 && pip config set global.trusted-host mirrors.cloud.tencent.com \
 && pip install --upgrade pip \
 && apk add py3-numpy \
-&& pip install wheel \
-&& pip install pkuseg \
+&& pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pkuseg \
 && apk add py3-wordcloud \
 && apk add py3-matplotlib \
 && apk add py3-imageio \
